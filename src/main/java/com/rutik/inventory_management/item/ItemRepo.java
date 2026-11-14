@@ -8,13 +8,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class ItemRepo {
     //crud
     public void addItem(Item item){
         try (Connection connection = Util.getConnection()){
-            String sql = "INSERT INTO items (item_name, item_category, item_price, item_quantity ) VALUES (?,?,?,?)";
+            String sql = "INSERT INTO items (item_name, item_category, item_price, item_quantity ) VALUES (?,?,?,?);";
             try (PreparedStatement ps = connection.prepareStatement(sql)){
                 ps.setString(1,item.getName());
                 ps.setString(2,item.getCategory().toString());
@@ -50,7 +52,7 @@ public class ItemRepo {
     }
     public void updateItemById(int id, Item item){
         try (Connection connection = Util.getConnection()){
-            String sql = "UPDATE items set item_name = ?, item_category = ?, item_price = ?, item_quantity = ? WHERE item_id = ?";
+            String sql = "UPDATE items set item_name = ?, item_category = ?, item_price = ?, item_quantity = ? WHERE item_id = ?;";
             try (PreparedStatement ps = connection.prepareStatement(sql)){
                 ps.setString(1,item.getName());
                 ps.setString(2,item.getCategory().toString());
@@ -66,7 +68,7 @@ public class ItemRepo {
     }
     public void deleteItemById(int id){
         try (Connection connection = Util.getConnection()){
-            String sql = "DELETE FROM items WHERE item_id = ?";
+            String sql = "DELETE FROM items WHERE item_id = ?;";
             try (PreparedStatement ps = connection.prepareStatement(sql)){
                 ps.setInt(1, id);
                 ps.executeUpdate();
@@ -74,5 +76,29 @@ public class ItemRepo {
         } catch (SQLException e){
             throw new RuntimeException(e);
         }
+    }
+
+    public List<Item> getAllItems(){
+        List<Item> itemList = new ArrayList<>();
+        try (Connection connection = Util.getConnection()){
+            String sql = "SELECT * FROM items;";
+            try (PreparedStatement ps = connection.prepareStatement(sql)){
+                ResultSet rs = ps.executeQuery();
+
+                while(rs.next()){
+                    itemList.add(new Item(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        Category.fromString(rs.getString(3)),
+                        rs.getBigDecimal(4),
+                        rs.getInt(5)
+                    ));
+                }
+            }
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+
+        return itemList;
     }
 }
