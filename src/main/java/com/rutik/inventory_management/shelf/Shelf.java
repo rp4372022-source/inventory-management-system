@@ -5,59 +5,42 @@ import com.rutik.inventory_management.item.Item;
 import java.util.List;
 
 public class Shelf {
-    private int id;
-    private String name;
-    private List<Item> items;
-    private int availableSlots;
+    private int shelfId;
+    private String shelfName;
+    private List<Item> shelfItems;
     private int maxCapacity;
 
     public Shelf(){}
 
-    public Shelf(int id, String name, int availableSlots, int maxCapacity) {
-        this.id = id;
-        this.name = name;
-        this.availableSlots = availableSlots;
+    public Shelf(int shelfId, String shelfName, List<Item> shelfItems, int maxCapacity) {
+        this.shelfId = shelfId;
+        this.shelfName = shelfName;
+        this.shelfItems = shelfItems;
         this.maxCapacity = maxCapacity;
     }
 
-    public Shelf(int id, String name, List<Item> items, int availableSlots, int maxCapacity) {
-        this.id = id;
-        this.name = name;
-        this.items = items;
-        this.availableSlots = availableSlots;
-        this.maxCapacity = maxCapacity;
+    public int getShelfId() {
+        return shelfId;
     }
 
-    public int getId() {
-        return id;
+    public void setShelfId(int shelfId) {
+        this.shelfId = shelfId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public String getShelfName() {
+        return shelfName;
     }
 
-    public String getName() {
-        return name;
+    public void setShelfName(String shelfName) {
+        this.shelfName = shelfName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public List<Item> getShelfItems() {
+        return shelfItems;
     }
 
-    public List<Item> getItems() {
-        return items;
-    }
-
-    public void setItems(List<Item> items) {
-        this.items = items;
-    }
-
-    public int getAvailableSlots() {
-        return availableSlots;
-    }
-
-    public void setAvailableSlots(int availableSlots) {
-        this.availableSlots = availableSlots;
+    public void setShelfItems(List<Item> shelfItems) {
+        this.shelfItems = shelfItems;
     }
 
     public int getMaxCapacity() {
@@ -66,16 +49,5 @@ public class Shelf {
 
     public void setMaxCapacity(int maxCapacity) {
         this.maxCapacity = maxCapacity;
-    }
-
-    @Override
-    public String toString() {
-        return "Shelf{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", items=" + items +
-                ", availableSlots=" + availableSlots +
-                ", maxCapacity=" + maxCapacity +
-                '}';
     }
 }

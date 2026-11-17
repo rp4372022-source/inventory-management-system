@@ -32,7 +32,7 @@ public class ShelfController {
         shelfService.delete(id);
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("/getall")
     public List<Shelf> getAll(){
         return shelfService.getAll();
     }
