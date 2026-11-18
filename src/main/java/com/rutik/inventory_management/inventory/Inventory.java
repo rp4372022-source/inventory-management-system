@@ -8,6 +8,12 @@ public class Inventory {
 
     public Inventory(){}
 
+    public Inventory(int shelfId, int itemId, int quantity) {
+        this.shelfId = shelfId;
+        this.itemId = itemId;
+        this.itemQuantity = quantity;
+    }
+
     public Inventory(int inventoryId, int shelfId, int itemId, int quantity) {
         this.inventoryId = inventoryId;
         this.shelfId = shelfId;

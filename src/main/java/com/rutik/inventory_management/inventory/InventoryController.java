@@ -2,6 +2,7 @@ package com.rutik.inventory_management.inventory;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FilterOutputStream;
 import java.util.List;
 
 @RestController
@@ -14,9 +15,9 @@ public class InventoryController {
     }
 
     @PostMapping("/add")
-    public void add(@RequestBody Inventory inventory){
-        System.out.println(inventory);
-        inventoryService.add(inventory);
+    public void add(@RequestBody AddNewItemToShelfRequest request){
+        System.out.println(request);
+        inventoryService.add(request);
     }
 
     @GetMapping("/get/{id}")

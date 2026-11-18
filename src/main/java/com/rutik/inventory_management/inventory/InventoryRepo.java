@@ -1,6 +1,5 @@
 package com.rutik.inventory_management.inventory;
 
-import com.rutik.inventory_management.shelf.Shelf;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -39,5 +38,15 @@ public class InventoryRepo {
     public void delete(int inventoryId) {
         String sql = "DELETE FROM inventory WHERE inventory_id = ?";
         jdbcTemplate.update(sql, inventoryId);
+    }
+
+    public int getInventoryId(int shelfId, int itemId){
+        try{
+            String sql = "SELECT inventory_id FROM inventory WHERE shelf_id = ?, item_id = ?;";
+            return jdbcTemplate.queryForObject(sql,Integer.class,shelfId,itemId);
+        } catch (Exception e){
+            return -1;
+        }
+
     }
 }
