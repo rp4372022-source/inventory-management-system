@@ -29,4 +29,8 @@ public class ShelfService {
     public List<Shelf> getAll(){
         return shelfRepo.getAll();
     }
+
+    public int getShelfIdByName(String name) {
+        return  shelfRepo.getShelfIdByName(name);
+    }
 }

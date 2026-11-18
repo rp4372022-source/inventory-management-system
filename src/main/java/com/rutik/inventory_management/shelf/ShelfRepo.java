@@ -38,4 +38,15 @@ public class ShelfRepo {
         String sql = "SELECT * FROM shelves;";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Shelf.class));
     }
+
+    public int getShelfIdByName(String name) {
+        String sql = "SELECT shelf_id FROM shelves WHERE shelf_name = ?;";
+        try{
+            return jdbcTemplate.queryForObject(sql, Integer.class, name);
+        } catch (Exception e)
+        {
+            throw new RuntimeException("No shelf found with name"+name+" "+e);
+        }
+
+    }
 }
