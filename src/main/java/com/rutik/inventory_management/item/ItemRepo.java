@@ -100,4 +100,23 @@ public class ItemRepo {
 
         return itemList;
     }
+
+    public int getItemIdBySku(String sku) {
+
+        try (Connection connection = Util.getConnection()){
+            String sql = "SELECT item_id FROM items WHERE sku = ?";
+            try (PreparedStatement ps = connection.prepareStatement(sql)){
+                ps.setString(1, sku);
+                ResultSet rs = ps.executeQuery();
+
+                if(rs.next()){
+                    return rs.getInt("item_id");
+                }
+            }
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+
+        return -1;
+    }
 }

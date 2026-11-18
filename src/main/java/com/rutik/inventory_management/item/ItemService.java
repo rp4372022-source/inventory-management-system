@@ -35,4 +35,9 @@ public class ItemService {
     public List<Item> getAllItems(){
         return repo.getAllItems();
     }
+
+    public int getItemIdBySku(String sku){
+        return repo.getItemIdBySku(sku);
+    }
+
 }
