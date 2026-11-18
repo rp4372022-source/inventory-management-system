@@ -16,12 +16,12 @@ public class ItemRepo {
     //crud
     public void addItem(Item item){
         try (Connection connection = Util.getConnection()){
-            String sql = "INSERT INTO items (item_name, item_category, item_price, item_quantity ) VALUES (?,?,?,?);";
+            String sql = "INSERT INTO items (item_name, item_category, item_price, sku) VALUES (?,?,?,?);";
             try (PreparedStatement ps = connection.prepareStatement(sql)){
                 ps.setString(1,item.getName());
                 ps.setString(2,item.getCategory().toString());
                 ps.setBigDecimal(3,item.getPrice());
-                ps.setInt(4,item.getQuantity());
+                ps.setString(4,item.getSku());
                 ps.executeUpdate();
             }
         } catch (SQLException e){
@@ -37,11 +37,11 @@ public class ItemRepo {
                 ResultSet rs = ps.executeQuery();
                 if(rs.next()){
                     return new Item(
-                            rs.getInt(1),
-                            rs.getString(2),
-                            Category.fromString(rs.getString(3)),
-                            rs.getBigDecimal(4),
-                            rs.getInt(5)
+                            rs.getInt("item_id"),
+                            rs.getString("item_name"),
+                            Category.fromString(rs.getString("item_category")),
+                            rs.getBigDecimal("item_price"),
+                            rs.getString("sku")
                     );
                 }
             }
@@ -52,14 +52,13 @@ public class ItemRepo {
     }
     public void updateItemById(int id, Item item){
         try (Connection connection = Util.getConnection()){
-            String sql = "UPDATE items set item_name = ?, item_category = ?, item_price = ?, item_quantity = ? WHERE item_id = ?;";
+            String sql = "UPDATE items set item_name = ?, item_category = ?, item_price = ?, sku = ? WHERE item_id = ?;";
             try (PreparedStatement ps = connection.prepareStatement(sql)){
                 ps.setString(1,item.getName());
                 ps.setString(2,item.getCategory().toString());
                 ps.setBigDecimal(3,item.getPrice());
-                ps.setInt(4,item.getQuantity());
+                ps.setString(4, item.getSku());
                 ps.setInt(5,id);
-
                 ps.executeUpdate();
             }
         } catch (SQLException e){
@@ -87,11 +86,11 @@ public class ItemRepo {
 
                 while(rs.next()){
                     itemList.add(new Item(
-                        rs.getInt(1),
-                        rs.getString(2),
-                        Category.fromString(rs.getString(3)),
-                        rs.getBigDecimal(4),
-                        rs.getInt(5)
+                        rs.getInt("item_id"),
+                        rs.getString("item_name"),
+                        Category.fromString(rs.getString("item_category")),
+                        rs.getBigDecimal("item_price"),
+                            rs.getString("sku")
                     ));
                 }
             }

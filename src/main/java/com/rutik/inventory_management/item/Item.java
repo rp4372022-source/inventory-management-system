@@ -7,23 +7,23 @@ public class Item {
     private String name;
     private Category category;
     private BigDecimal price;
-    private int quantity;
+    private String sku;
 
     public Item() {} //no args for spring deserialization
 
-    public Item(String name, Category category, BigDecimal price, int quantity) {
+    public Item(String name, Category category, BigDecimal price, String sku) {
         this.name = name;
         this.category = category;
         this.price = price;
-        this.quantity = quantity;
+        this.sku = sku;
     }
 
-    public Item(int id, String name, Category category, BigDecimal price, int quantity) {
+    public Item(int id, String name, Category category, BigDecimal price, String sku) {
         this.id = id;
         this.name = name;
         this.category = category;
         this.price = price;
-        this.quantity = quantity;
+        this.sku = sku;
     }
 
     public int getId() {
@@ -58,11 +58,11 @@ public class Item {
         this.price = price;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public String getSku() {
+        return sku;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setSku(String sku) {
+        this.sku = sku;
     }
 }

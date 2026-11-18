@@ -1,6 +1,5 @@
 package com.rutik.inventory_management.item;
 
-import java.util.Locale;
 
 public enum Category {
     UNKNOWN,
