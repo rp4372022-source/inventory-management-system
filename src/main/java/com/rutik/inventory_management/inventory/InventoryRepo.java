@@ -1,6 +1,7 @@
 package com.rutik.inventory_management.inventory;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -25,9 +26,13 @@ public class InventoryRepo {
         return jdbcTemplate.queryForObject(sql,new BeanPropertyRowMapper<>(Inventory.class), inventoryId);
     }
 
-    public List<Inventory> getAll() {
-        String sql = "SELECT * FROM inventory;";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Inventory.class));
+    public List<InventoryResponseDTO> getAll() {
+//        String sql = "SELECT * FROM inventory;";
+//        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Inventory.class));
+
+        String sql = "select s.shelf_name as shelf_name, i.item_name as item_name, e.item_quantity as item_quantity from inventory e inner join shelves s on e.shelf_id = s.shelf_id inner join items i on e.item_id= i.item_id;";
+
+        return jdbcTemplate.query(sql, new DataClassRowMapper<>(InventoryResponseDTO.class));
     }
 
     public void set(int inventoryId, Inventory inventory) {

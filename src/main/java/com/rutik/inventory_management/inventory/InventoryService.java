@@ -67,7 +67,7 @@ public class InventoryService {
     public void delete(int id){
         inventoryRepo.delete(id);
     }
-    public List<Inventory> getAll(){
+    public List<InventoryResponseDTO> getAll(){
         return inventoryRepo.getAll();
     }
 }
