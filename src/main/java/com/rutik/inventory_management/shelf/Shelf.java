@@ -1,18 +1,18 @@
 package com.rutik.inventory_management.shelf;
 
-import com.rutik.inventory_management.item.Item;
+import com.rutik.inventory_management.item.ItemResponseDTO;
 
 import java.util.List;
 
 public class Shelf {
     private int shelfId;
     private String shelfName;
-    private List<Item> shelfItems;
+    private List<ItemResponseDTO> shelfItems;
     private int maxCapacity;
 
     public Shelf(){}
 
-    public Shelf(int shelfId, String shelfName, List<Item> shelfItems, int maxCapacity) {
+    public Shelf(int shelfId, String shelfName, List<ItemResponseDTO> shelfItems, int maxCapacity) {
         this.shelfId = shelfId;
         this.shelfName = shelfName;
         this.shelfItems = shelfItems;
@@ -35,11 +35,11 @@ public class Shelf {
         this.shelfName = shelfName;
     }
 
-    public List<Item> getShelfItems() {
+    public List<ItemResponseDTO> getShelfItems() {
         return shelfItems;
     }
 
-    public void setShelfItems(List<Item> shelfItems) {
+    public void setShelfItems(List<ItemResponseDTO> shelfItems) {
         this.shelfItems = shelfItems;
     }
 

@@ -1,6 +1,7 @@
 package com.rutik.inventory_management.inventory;
 
-import com.rutik.inventory_management.item.Item;
+import com.rutik.inventory_management.exception.ShelfException;
+import com.rutik.inventory_management.item.ItemRequestDTO;
 import com.rutik.inventory_management.item.ItemService;
 import com.rutik.inventory_management.shelf.ShelfService;
 import org.springframework.stereotype.Service;
@@ -21,40 +22,44 @@ public class InventoryService {
     }
 
     @Transactional //ensures all or nothing, something goes wrong entire transaction get roll back
-    public void add(AddNewItemToShelfRequest addNewItemToShelfRequest){
-        Item item = new Item(
-                addNewItemToShelfRequest.name(),
-                addNewItemToShelfRequest.category(),
-                addNewItemToShelfRequest.price(),
-                addNewItemToShelfRequest.sku()
-        );
+    public void add(AddNewItemToShelfRequest request){
 
-        //finding and updating item in items table
-        int itemId = itemService.getItemIdBySku(addNewItemToShelfRequest.sku());
-        if(itemId == -1){
-            itemService.addItem(item);
-            itemId = itemService.getItemIdBySku(addNewItemToShelfRequest.sku());
-        } else {
-            itemService.updateItemById(itemId, item);
+        Integer itemId = itemService.getItemIdBySku(request.sku());
+        // if no item id found then add as new
+        if(itemId == null){
+            itemService.addItem(
+                    new ItemRequestDTO(
+                            request.name(),
+                            request.category(),
+                            request.price(),
+                            request.sku()
+                    )
+            );
+            // requesting again after new item added
+            itemId = itemService.getItemIdBySku(request.sku());
         }
-        // finding shelf id and updating inventory
-        System.out.println(addNewItemToShelfRequest.shelfName());
-        int shelfId = shelfService.getShelfIdByName(addNewItemToShelfRequest.shelfName());
 
-        //find shelf id and item id in inventory
-        int inventoryId = inventoryRepo.getInventoryId(shelfId, itemId);
+        // finding shelf id
+        Integer shelfId = shelfService.getShelfIdByName(request.shelfName());
 
-        if(inventoryId == -1){
+        if(shelfId == null){
+            throw new ShelfException("Shelf not found with name: "+request.shelfName());
+        }
+
+        // find the inventory id and save it
+        Integer inventoryId = inventoryRepo.getInventoryId(shelfId, itemId);
+
+        if(inventoryId == null){
             inventoryRepo.add(new Inventory(
                     shelfId,
                     itemId,
-                    addNewItemToShelfRequest.quantity()
+                    request.quantity()
             ));
         } else {
             inventoryRepo.set(inventoryId,new Inventory(
                     shelfId,
                     itemId,
-                    addNewItemToShelfRequest.quantity()
+                    request.quantity()
             ));
         }
     }
