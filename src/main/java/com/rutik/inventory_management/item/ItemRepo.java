@@ -14,21 +14,21 @@ import java.util.List;
 @Repository
 public class ItemRepo {
     //crud
-    public void addItem(ItemRequestDTO item){
+    public void addItem(Item item){
         try (Connection connection = Util.getConnection()){
             String sql = "INSERT INTO items (item_name, item_category, item_price, sku) VALUES (?,?,?,?);";
             try (PreparedStatement ps = connection.prepareStatement(sql)){
-                ps.setString(1,item.name());
-                ps.setString(2,item.category().toString());
-                ps.setBigDecimal(3,item.price());
-                ps.setString(4,item.sku());
+                ps.setString(1,item.getName());
+                ps.setString(2,item.getCategory().toString());
+                ps.setBigDecimal(3,item.getPrice());
+                ps.setString(4,item.getSku());
                 ps.executeUpdate();
             }
         } catch (SQLException e){
             throw new RuntimeException(e);
         }
     }
-    public ItemResponseDTO getItemById(int id){
+    public Item getItemById(int id){
         try (Connection connection = Util.getConnection()){
             String sql = "SELECT * FROM items WHERE item_id = ?";
             try (PreparedStatement ps = connection.prepareStatement(sql)){
@@ -36,7 +36,7 @@ public class ItemRepo {
 
                 ResultSet rs = ps.executeQuery();
                 if(rs.next()){
-                    return new ItemResponseDTO(
+                    return new Item(
                             rs.getInt("item_id"),
                             rs.getString("item_name"),
                             Category.fromString(rs.getString("item_category")),
@@ -50,14 +50,14 @@ public class ItemRepo {
         }
         return null;
     }
-    public void updateItemById(int id, ItemRequestDTO item){
+    public void updateItemById(int id, Item item){
         try (Connection connection = Util.getConnection()){
             String sql = "UPDATE items set item_name = ?, item_category = ?, item_price = ?, sku = ? WHERE item_id = ?;";
             try (PreparedStatement ps = connection.prepareStatement(sql)){
-                ps.setString(1,item.name());
-                ps.setString(2,item.category().toString());
-                ps.setBigDecimal(3,item.price());
-                ps.setString(4, item.sku());
+                ps.setString(1,item.getName());
+                ps.setString(2,item.getCategory().toString());
+                ps.setBigDecimal(3,item.getPrice());
+                ps.setString(4, item.getSku());
                 ps.setInt(5,id);
                 ps.executeUpdate();
             }
@@ -77,19 +77,19 @@ public class ItemRepo {
         }
     }
 
-    public List<ItemResponseDTO> getAllItems(){
-        List<ItemResponseDTO> itemList = new ArrayList<>();
+    public List<Item> getAllItems(){
+        List<Item> itemList = new ArrayList<>();
         try (Connection connection = Util.getConnection()){
             String sql = "SELECT * FROM items;";
             try (PreparedStatement ps = connection.prepareStatement(sql)){
                 ResultSet rs = ps.executeQuery();
 
                 while(rs.next()){
-                    itemList.add(new ItemResponseDTO(
-                        rs.getInt("item_id"),
-                        rs.getString("item_name"),
-                        Category.fromString(rs.getString("item_category")),
-                        rs.getBigDecimal("item_price"),
+                    itemList.add(new Item(
+                            rs.getInt("item_id"),
+                            rs.getString("item_name"),
+                            Category.fromString(rs.getString("item_category")),
+                            rs.getBigDecimal("item_price"),
                             rs.getString("sku")
                     ));
                 }
