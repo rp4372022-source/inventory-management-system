@@ -2,14 +2,14 @@ package com.rutik.inventory_management.item;
 
 import java.math.BigDecimal;
 
-public class Item {
-    private int id;
+class Item { // making class default cuz dto's can handle
+    private Integer id; //changed from int to Integer so it can be null and can catch if not present
     private String name;
     private Category category;
     private BigDecimal price;
     private String sku;
 
-    public Item() {} //no args for spring deserialization
+    public Item() {} //required for spring/jackson
 
     public Item(String name, Category category, BigDecimal price, String sku) {
         this.name = name;
@@ -19,11 +19,8 @@ public class Item {
     }
 
     public Item(int id, String name, Category category, BigDecimal price, String sku) {
+        this(name,category,price,sku);
         this.id = id;
-        this.name = name;
-        this.category = category;
-        this.price = price;
-        this.sku = sku;
     }
 
     public int getId() {
