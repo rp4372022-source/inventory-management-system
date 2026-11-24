@@ -2,7 +2,7 @@ package com.rutik.inventory_management.item;
 
 import java.math.BigDecimal;
 
-class Item { // making class default cuz dto's can handle
+public class Item { // making class default cuz dto's can handle
     private Integer id; //changed from int to Integer so it can be null and can catch if not present
     private String name;
     private Category category;

@@ -1,5 +1,6 @@
 package com.rutik.inventory_management.shelf;
 
+import com.rutik.inventory_management.exception.ShelfException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -25,7 +26,7 @@ public class ShelfRepo {
     }
 
     public void set(int id, Shelf shelf){
-        String sql = "UPDATE shelves SET shelf_name = ?, max_capacity =? WHERE id = ?;";
+        String sql = "UPDATE shelves SET shelf_name = ?, max_capacity =? WHERE shelf_id = ?;";
         jdbcTemplate.update(sql, shelf.getShelfName(), shelf.getMaxCapacity(), id);
     }
 
@@ -46,6 +47,20 @@ public class ShelfRepo {
         } catch (Exception e)
         {
             throw new RuntimeException("No shelf found with name"+name+" "+e);
+        }
+
+    }
+
+    public int getMaxCapacityOfShelf(int shelfId) {
+        try{
+            String sql = "SELECT max_capacity FROM shelves WHERE shelf_id = ?";
+            Integer maxCapacity = jdbcTemplate.queryForObject(sql, Integer.class, shelfId);
+
+            if(maxCapacity == null) throw new ShelfException("No shelf found with shelf id "+shelfId);
+            return maxCapacity;
+        } catch (Exception e)
+        {
+            throw new RuntimeException(e);
         }
 
     }

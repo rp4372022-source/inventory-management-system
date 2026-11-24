@@ -1,6 +1,6 @@
 package com.rutik.inventory_management.inventory;
 
-import com.rutik.inventory_management.exception.ShelfException;
+import com.rutik.inventory_management.exception.InventoryException;
 import com.rutik.inventory_management.item.ItemRequestDTO;
 import com.rutik.inventory_management.item.ItemService;
 import com.rutik.inventory_management.shelf.ShelfService;
@@ -24,9 +24,18 @@ public class InventoryService {
     @Transactional //ensures all or nothing, something goes wrong entire transaction get roll back
     public void add(AddNewItemToShelfRequest request){
 
-        Integer itemId = itemService.getItemIdBySku(request.sku());
+        //checking if shelf has space
+        int shelfId = shelfService.getShelfIdByName(request.shelfName());
+
+        int availableSpaceInShelf = shelfService.getMaxCapacity(shelfId)
+                - inventoryRepo.getItemsQuantityCount(shelfId);
+        if(availableSpaceInShelf == 0){
+            throw new InventoryException("No space available in shelf");
+        }
+
+        int itemId = itemService.getItemIdBySku(request.sku());
         // if no item id found then add as new
-        if(itemId == null){
+        if(itemId == -1){
             itemService.addItem(
                     new ItemRequestDTO(
                             request.name(),
@@ -39,17 +48,10 @@ public class InventoryService {
             itemId = itemService.getItemIdBySku(request.sku());
         }
 
-        // finding shelf id
-        Integer shelfId = shelfService.getShelfIdByName(request.shelfName());
-
-        if(shelfId == null){
-            throw new ShelfException("Shelf not found with name: "+request.shelfName());
-        }
-
         // find the inventory id and save it
         Integer inventoryId = inventoryRepo.getInventoryId(shelfId, itemId);
 
-        if(inventoryId == null){
+        if(inventoryId == -1){
             inventoryRepo.add(new Inventory(
                     shelfId,
                     itemId,

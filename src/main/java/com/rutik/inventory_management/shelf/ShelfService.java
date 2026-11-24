@@ -33,4 +33,8 @@ public class ShelfService {
     public int getShelfIdByName(String name) {
         return  shelfRepo.getShelfIdByName(name);
     }
+
+    public int getMaxCapacity(int shelfId) {
+        return shelfRepo.getMaxCapacityOfShelf(shelfId);
+    }
 }

@@ -36,14 +36,15 @@ public class ItemService {
                 .toList();
     }
 
-    public Integer getItemIdBySku(String sku){
+    public int getItemIdBySku(String sku){
         if(sku == null){
             throw new IllegalArgumentException("sku cannot be null");
         }
         if(sku.isEmpty()){
             throw new IllegalArgumentException("sku cannot be empty");
         }
-        return repo.getItemIdBySku(sku);
+        int id = repo.getItemIdBySku(sku);
+        return id;
     }
 
     private Item toItem(ItemRequestDTO itemRequestDTO){

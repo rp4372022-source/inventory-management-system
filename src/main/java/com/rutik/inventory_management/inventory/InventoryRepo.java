@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
 import java.util.List;
 
 @Repository
@@ -45,7 +46,7 @@ public class InventoryRepo {
         jdbcTemplate.update(sql, inventoryId);
     }
 
-    public int getInventoryId(int shelfId, int itemId){
+    public Integer getInventoryId(int shelfId, int itemId){
         try{
             String sql = "SELECT inventory_id FROM inventory WHERE shelf_id = ?, item_id = ?;";
             return jdbcTemplate.queryForObject(sql,Integer.class,shelfId,itemId);
@@ -53,5 +54,16 @@ public class InventoryRepo {
             return -1;
         }
 
+    }
+
+    public int getItemsQuantityCount(int shelfId){
+        try{
+            String sql = "SELECT sum(item_quantity) FROM inventory WHERE shelf_id = ?";
+            //return jdbcTemplate.queryForObject(sql,Integer.class,shelfId,itemId);
+            Integer count = jdbcTemplate.queryForObject(sql, Integer.class, shelfId);
+            return (count == null) ? 0 : count;
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 }

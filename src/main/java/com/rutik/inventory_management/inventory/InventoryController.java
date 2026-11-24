@@ -15,7 +15,6 @@ public class InventoryController {
 
     @PostMapping("/add")
     public void add(@RequestBody AddNewItemToShelfRequest request){
-        System.out.println(request);
         inventoryService.add(request);
     }
 
