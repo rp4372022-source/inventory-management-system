@@ -1,5 +1,6 @@
 package com.rutik.inventory_management.inventory;
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public class InventoryController {
     }
 
     @PostMapping("/add")
-    public void add(@RequestBody AddNewItemToShelfRequest request){
+    public void add(@Valid @RequestBody AddNewItemToShelfRequest request){
         inventoryService.add(request);
     }
 

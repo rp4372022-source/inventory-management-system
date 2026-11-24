@@ -41,14 +41,15 @@ public class ShelfRepo {
     }
 
     public int getShelfIdByName(String name) {
-        String sql = "SELECT shelf_id FROM shelves WHERE shelf_name = ?;";
         try{
-            return jdbcTemplate.queryForObject(sql, Integer.class, name);
-        } catch (Exception e)
-        {
-            throw new RuntimeException("No shelf found with name"+name+" "+e);
+            String sql = "SELECT shelf_id FROM shelves WHERE shelf_name = ?;";
+            Integer id = jdbcTemplate.queryForObject(sql, Integer.class, name);
+            if(id == null)
+                throw new ShelfException("Id not found with shelf name :"+name);
+            return id;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-
     }
 
     public int getMaxCapacityOfShelf(int shelfId) {

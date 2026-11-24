@@ -1,5 +1,7 @@
 package com.rutik.inventory_management.inventory;
 
+import com.rutik.inventory_management.exception.InventoryException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -46,14 +48,15 @@ public class InventoryRepo {
         jdbcTemplate.update(sql, inventoryId);
     }
 
-    public Integer getInventoryId(int shelfId, int itemId){
-        try{
-            String sql = "SELECT inventory_id FROM inventory WHERE shelf_id = ?, item_id = ?;";
-            return jdbcTemplate.queryForObject(sql,Integer.class,shelfId,itemId);
+    public int getInventoryId(int shelfId, int itemId) throws InventoryException{
+        String sql = "SELECT inventory_id FROM inventory WHERE shelf_id = ? AND item_id = ?;";
+        try {
+            Integer id = jdbcTemplate.queryForObject(sql, Integer.class, shelfId, itemId);
+            return id != null ? id : -1;
         } catch (Exception e){
+//            throw new InventoryException("Inventory doesn't exist for shelfId: " + shelfId + " and itemId: " + itemId);
             return -1;
         }
-
     }
 
     public int getItemsQuantityCount(int shelfId){

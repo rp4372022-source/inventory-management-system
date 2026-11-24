@@ -17,7 +17,6 @@ public class ShelfService {
     public Shelf get(int id){
         return shelfRepo.get(id);
     }
-
     public void set(int id, Shelf shelf){
         shelfRepo.set(id, shelf);
     }
@@ -31,7 +30,7 @@ public class ShelfService {
     }
 
     public int getShelfIdByName(String name) {
-        return  shelfRepo.getShelfIdByName(name);
+        return shelfRepo.getShelfIdByName(name);
     }
 
     public int getMaxCapacity(int shelfId) {

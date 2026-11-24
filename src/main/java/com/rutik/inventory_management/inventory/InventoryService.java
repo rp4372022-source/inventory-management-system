@@ -4,6 +4,7 @@ import com.rutik.inventory_management.exception.InventoryException;
 import com.rutik.inventory_management.item.ItemRequestDTO;
 import com.rutik.inventory_management.item.ItemService;
 import com.rutik.inventory_management.shelf.ShelfService;
+import org.hibernate.validator.internal.constraintvalidators.bv.number.bound.MaxValidatorForBigDecimal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,11 +28,13 @@ public class InventoryService {
         //checking if shelf has space
         int shelfId = shelfService.getShelfIdByName(request.shelfName());
 
-        int availableSpaceInShelf = shelfService.getMaxCapacity(shelfId)
-                - inventoryRepo.getItemsQuantityCount(shelfId);
-        if(availableSpaceInShelf == 0){
-            throw new InventoryException("No space available in shelf");
-        }
+        //checking if adding new quantity exceeds quantity
+        int shelfMaxQuantity = shelfService.getMaxCapacity(shelfId);
+        int currentQuantity = inventoryRepo.getItemsQuantityCount(shelfId);
+        int newQuantity = request.quantity();
+
+        if(shelfMaxQuantity < currentQuantity + newQuantity)
+            throw new InventoryException("Not enough space for new quantity");
 
         int itemId = itemService.getItemIdBySku(request.sku());
         // if no item id found then add as new
@@ -51,17 +54,21 @@ public class InventoryService {
         // find the inventory id and save it
         Integer inventoryId = inventoryRepo.getInventoryId(shelfId, itemId);
 
+        //adding new Quantity to old quantity
+        int updatedQuantity = currentQuantity+newQuantity;
+
+//        System.out.println(currentQuantity+" "+newQuantity+" "+shelfMaxQuantity+" "+currentQuantity);
         if(inventoryId == -1){
             inventoryRepo.add(new Inventory(
                     shelfId,
                     itemId,
-                    request.quantity()
+                    updatedQuantity
             ));
         } else {
             inventoryRepo.set(inventoryId,new Inventory(
                     shelfId,
                     itemId,
-                    request.quantity()
+                    updatedQuantity
             ));
         }
     }
