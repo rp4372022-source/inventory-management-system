@@ -1,6 +1,7 @@
 package com.rutik.inventory_management.inventory;
 
 import com.rutik.inventory_management.exception.InventoryException;
+import com.rutik.inventory_management.inventory.exception.InventoryNotFoundException;
 import com.rutik.inventory_management.item.ItemRequestDTO;
 import com.rutik.inventory_management.item.ItemService;
 import com.rutik.inventory_management.shelf.ShelfService;
@@ -73,7 +74,9 @@ public class InventoryService {
         }
     }
     public Inventory get(int id){
-        return inventoryRepo.get(id);
+        return inventoryRepo.get(id).orElseThrow(()->
+                new InventoryNotFoundException("No inventory found with id : "+id)
+        );
     }
     public void set(int id,Inventory inventory){
         inventoryRepo.set(id, inventory);
