@@ -2,6 +2,7 @@ package com.rutik.inventory_management.inventory;
 
 import com.rutik.inventory_management.exception.InventoryException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class InventoryRepo {
@@ -24,9 +26,11 @@ public class InventoryRepo {
         jdbcTemplate.update(sql, inventory.getInventoryId(), inventory.getShelfId(),inventory.getItemId(), inventory.getItemQuantity());
     }
 
-    public Inventory get(int inventoryId) {
+    public Optional<Inventory> get(int inventoryId) {
         String sql = "SELECT * FROM inventory WHERE inventory_id = ?;";
-        return jdbcTemplate.queryForObject(sql,new BeanPropertyRowMapper<>(Inventory.class), inventoryId);
+
+        List<Inventory> result = jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(Inventory.class), inventoryId);
+        return Optional.ofNullable(DataAccessUtils.singleResult(result));
     }
 
     public List<InventoryResponseDTO> getAll() {
