@@ -42,9 +42,10 @@ public class InventoryRepo {
         return jdbcTemplate.query(sql, new DataClassRowMapper<>(InventoryResponseDTO.class));
     }
 
-    public void set(int inventoryId, Inventory inventory) {
+    public boolean set(int inventoryId, Inventory inventory) {
         String sql = "UPDATE inventory SET shelf_id = ?, item_id = ?, item_quantity = ? WHERE inventory_id = ?;";
-        jdbcTemplate.update(sql, inventory.getShelfId(), inventory.getItemId(), inventory.getItemQuantity(),inventoryId);
+        int rowsAffected = jdbcTemplate.update(sql, inventory.getShelfId(), inventory.getItemId(), inventory.getItemQuantity(),inventoryId);
+        return rowsAffected > 0;
     }
 
     public void delete(int inventoryId) {
