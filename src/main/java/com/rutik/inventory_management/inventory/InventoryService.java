@@ -79,7 +79,10 @@ public class InventoryService {
         );
     }
     public void set(int id,Inventory inventory){
-        inventoryRepo.set(id, inventory);
+        boolean isUpdated = inventoryRepo.set(id, inventory);
+        if(!isUpdated){
+            throw new InventoryNotFoundException("No inventory found with id : "+id);
+        }
     }
     public void delete(int id){
         inventoryRepo.delete(id);
