@@ -1,7 +1,11 @@
 package com.rutik.inventory_management.inventory;
 
 public record InventoryResponseDTO(
-    String shelfName,
-    String itemName,
-    int itemQuantity
+        int inventoryId,
+        int shelfId,
+        String shelfName,
+        int itemId,
+        String sku,
+        String itemName,
+        int itemQuantity
 ) { }
