@@ -37,7 +37,20 @@ public class InventoryRepo {
 //        String sql = "SELECT * FROM inventory;";
 //        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Inventory.class));
 
-        String sql = "select s.shelf_name as shelf_name, i.item_name as item_name, e.item_quantity as item_quantity from inventory e inner join shelves s on e.shelf_id = s.shelf_id inner join items i on e.item_id= i.item_id;";
+//        String sql = "select s.shelf_name as shelf_name, i.item_name as item_name, e.item_quantity as item_quantity from inventory e inner join shelves s on e.shelf_id = s.shelf_id inner join items i on e.item_id= i.item_id;";
+
+//        return jdbcTemplate.query(sql, new DataClassRowMapper<>(InventoryResponseDTO.class));
+        String sql = "SELECT" +
+                "    inv.inventory_id," +
+                "    inv.shelf_id," +
+                "    s.shelf_name," +
+                "    inv.item_id," +
+                "    i.sku," +
+                "    i.item_name," +
+                "    inv.item_quantity" +
+                " FROM inventory inv" +
+                " JOIN shelves s ON inv.shelf_id = s.shelf_id" +
+                " JOIN items i ON inv.item_id = i.item_id;";
 
         return jdbcTemplate.query(sql, new DataClassRowMapper<>(InventoryResponseDTO.class));
     }
