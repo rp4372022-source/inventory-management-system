@@ -25,12 +25,12 @@ public class InventoryController {
     }
 
     @PutMapping("/set/{id}")
-    public void set(@PathVariable int id, @RequestBody Inventory inventory){
+    public void set(@Valid @PathVariable int id, @Valid @RequestBody Inventory inventory){
         inventoryService.set(id, inventory);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable int id){
+    public void delete(@Valid @PathVariable int id){
         inventoryService.delete(id);
     }
 
